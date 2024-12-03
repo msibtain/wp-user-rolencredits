@@ -1,8 +1,8 @@
 <h3>User Role and Credits</h3>
-<table class="form-table">
+<table class="form-table" cellpadding="5">
     <?php if (count($wpwcRoles)) { ?>
-    <tr>
-        <th><label for="custom_field"><?php echo __('Chose Package'); ?></label></th>
+    <tr style="border: 1px solid #fff;">
+        <th style="padding-left: 10px;"><label for="custom_field"><?php echo __('Choose Package'); ?></label></th>
         <td>
             <select name="es_user_role" id="es_user_role">
                 <option value=""><?php echo __('Select Package'); ?></option>
@@ -13,4 +13,11 @@
         </td>
     </tr>
     <?php } ?>
+    <tr style="border: 1px solid #fff;">
+        <th style="padding-left: 10px;"><label for="custom_field"><?php echo __('User Credits'); ?></label></th>
+        <td>
+            <input type="text" name="es_user_credits" id="es_user_credits" />
+        </td>
+    </tr>
+    
 </table>
