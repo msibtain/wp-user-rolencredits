@@ -6,6 +6,10 @@ class clsWpUser
         add_action('show_user_profile', [$this, 'es_custom_user_profile_fields'], 999);
         add_action('edit_user_profile', [$this, 'es_custom_user_profile_fields'], 999);
         add_action( 'profile_update', [$this, 'es_save_custom_user_profile_fields'] );
+
+        add_filter( 'woocommerce_email_enabled_customer_processing_order',  [$this, 'es_disable_wc_email'], 10, 2 );
+        add_filter( 'woocommerce_email_enabled_customer_completed_order',  [$this, 'es_disable_wc_email'], 10, 2 );
+        
     }
 
     function es_custom_user_profile_fields( $user )
@@ -19,10 +23,6 @@ class clsWpUser
                 $wpwcRoles[$role] = $details['name'];
             }
         }
-        //$pm = get_post_meta(4843);
-        //$um = get_user_meta(246);
-        //p_r($pm);
-        
         include('views/admin/user_fields.php');
     }
 
@@ -51,6 +51,10 @@ class clsWpUser
             $this->addUserCredits( $user_id,  $_POST['es_user_credits']);
         }
 
+        # set / unset email preference;
+        $value = isset($_POST['send_invoice_to_mail']) ? 1 : 0;
+        update_user_meta($user_id, 'send_invoice_to_mail', $value);
+        
     }
 
     private function addUserCredits( $user_id, $credits )
@@ -164,6 +168,24 @@ class clsWpUser
         return ($arrPosts) ? $arrPosts[0]->ID : "";
 
     }
+
+    function es_disable_wc_email( $enabled, $order )
+    {
+        $user_id = $order->get_user_id();
+        $send_invoice_to_mail = get_user_meta($user_id, 'send_invoice_to_mail', true);
+
+        if ($send_invoice_to_mail === 1 || $send_invoice_to_mail === "1")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+        //return $enabled;
+    }
+
 
     private function startsWithWcwp($string) 
     {

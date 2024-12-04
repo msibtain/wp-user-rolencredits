@@ -19,5 +19,14 @@
             <input type="text" name="es_user_credits" id="es_user_credits" />
         </td>
     </tr>
+    <tr style="border: 1px solid #fff;">
+        <th style="padding-left: 10px;"><label for="disable_woocommerce_emails">Send invoice to mail</label></th>
+        <td>
+            <?php
+                $send_invoice_to_mail = get_user_meta($user->ID, 'send_invoice_to_mail', true);
+            ?>
+            <input type="checkbox" name="send_invoice_to_mail" id="send_invoice_to_mail" value="1" <?php checked($send_invoice_to_mail, 1); ?> />
+        </td>
+    </tr>
     
 </table>
