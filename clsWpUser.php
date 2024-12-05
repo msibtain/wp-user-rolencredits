@@ -115,6 +115,15 @@ class clsWpUser
             
             update_post_meta($credit_post_id, "_user_email", $objUser->user_email);
         }
+        else
+        {
+            # update credit status to active;
+            $post_data = array(
+                'ID'          => $credit_post_id,
+                'post_status' => '_wc_cs_active',
+            );
+            wp_update_post($post_data, true);
+        }
 
         $approved_credits = get_post_meta($credit_post_id, "_approved_credits", true);
         $approved_credits = (float)$approved_credits +  (float)$credits;
@@ -125,6 +134,7 @@ class clsWpUser
         update_post_meta($credit_post_id, "_available_credits", $available_credits);
 
         $this->addCreditTransaction($credit_post_id, $credits, $available_credits, $user_id);
+        $this->sendCreditEmail($objUser->user_email, $credits, $available_credits, $objUser->user_nicename);
         
     }
 
@@ -149,6 +159,22 @@ class clsWpUser
         update_post_meta($txn_post_id, "_debited", 0);
         update_post_meta($txn_post_id, "_balance", $balance);
 
+    }
+
+    private function sendCreditEmail($recipient, $credits, $balance, $name)
+    {
+        error_log('sib: sending credit add email to ' . $recipient);
+        
+        $email_class = WC()->mailer()->emails['WC_CreditEmail'];
+        $custom_data = [
+            'new_credit' => '$' . $credits,
+            'date_created' => date("M d, Y h:i a"),
+            'total_credit' => '$' . $balance,
+            'blogname' => get_bloginfo( 'name' ),
+            'user_nicename' => $name
+        ];
+
+        $email_class->trigger( $recipient, $custom_data );
     }
 
     private function isAdded($email)
