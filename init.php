@@ -15,4 +15,4 @@ Author URI: https://github.com/msibtain
 
 require_once __DIR__ . '/clsWpUser.php';
 require_once __DIR__ . '/clsWcExtend.php';
-//require_once __DIR__ . '/WC_CreditEmail.php';
+require_once __DIR__ . '/clsCron.php';

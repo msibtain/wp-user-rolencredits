@@ -3,21 +3,21 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-class WC_CreditEmail extends WC_Email {
+class WC_MonthlyCreditEmail extends WC_Email {
 
     private $custom_data = [];
 
     public function __construct() {
 
-        $this->id          = 'es_credit_email';
-        $this->title       = 'User Credits Email';
-        $this->description = 'User Credits Email sent to user when credits added to users.';
+        $this->id          = 'es_monthly_credit_email';
+        $this->title       = 'User Monthly Credits Email';
+        $this->description = 'User Monthly Credits Email sent to user every month if subscribed.';
 
-        $this->subject = __( '[{site_title}] - Payment Success' ) ;
-		$this->heading = __( 'Payment Success' ) ;
+        $this->subject = __( '[{site_title}] - Monthly Credit History' ) ;
+		$this->heading = __( 'Monthly Credit History' ) ;
         
-        $this->template_html  = 'emails/credit-email.php' ;
-        $this->template_plain = 'emails/plain/credit-email.php' ;
+        $this->template_html  = 'emails/credit-history-email.php' ;
+        $this->template_plain = 'emails/plain/credit-history-email.php' ;
         $this->placeholders   = array(
             '{order_date}'   => '',
             '{order_number}' => '',
@@ -64,4 +64,4 @@ class WC_CreditEmail extends WC_Email {
     }
 }
 
-new WC_CreditEmail();
+new WC_MonthlyCreditEmail();

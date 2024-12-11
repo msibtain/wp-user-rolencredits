@@ -13,10 +13,12 @@ class clsWcExtend
         error_log("sib: register custom email class");
 
         require_once plugin_dir_path( __FILE__ ) . 'WC_CreditEmail.php';
+        require_once plugin_dir_path( __FILE__ ) . 'WC_MonthlyCreditEmail.php';
+
         $email_classes['WC_CreditEmail'] = new WC_CreditEmail();
+        $email_classes['WC_MonthlyCreditEmail'] = new WC_MonthlyCreditEmail();
+
         return $email_classes;
-		//$email_classes['WC_CreditEmail'] = new WC_CreditEmail();
-        //return $email_classes;
 	}
 
     function es_custom_email_template_path( $template, $template_name, $template_path ) 

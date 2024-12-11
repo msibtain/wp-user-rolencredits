@@ -7,8 +7,8 @@ class clsWpUser
         add_action('edit_user_profile', [$this, 'es_custom_user_profile_fields'], 999);
         add_action( 'profile_update', [$this, 'es_save_custom_user_profile_fields'] );
 
-        add_filter( 'woocommerce_email_enabled_customer_processing_order',  [$this, 'es_disable_wc_email'], 10, 2 );
-        add_filter( 'woocommerce_email_enabled_customer_completed_order',  [$this, 'es_disable_wc_email'], 10, 2 );
+        //add_filter( 'woocommerce_email_enabled_customer_processing_order',  [$this, 'es_disable_wc_email'], 10, 2 );
+        //add_filter( 'woocommerce_email_enabled_customer_completed_order',  [$this, 'es_disable_wc_email'], 10, 2 );
         
     }
 
@@ -52,9 +52,92 @@ class clsWpUser
         }
 
         # set / unset email preference;
+        if (isset($_POST['send_invoice_to_mail']) && $_POST['send_invoice_to_mail'] === "1")
+        {
+            $user = get_user_by('id', $user_id);
+
+            if ( $post_parent = $this->isAdded( $user->user_email ) )
+            {
+                $history = $this->userCreditHistory( $post_parent );
+                
+                $temp[] = [
+                    'email' => $user->user_email,
+                    'history' => $history
+                ];
+                $this->sendCreditHistoryEmail($user->user_email, $user->user_nicename, $history, $post_parent, $user_id);
+            }
+            
+        }
+
         $value = isset($_POST['send_invoice_to_mail']) ? 1 : 0;
         update_user_meta($user_id, 'send_invoice_to_mail', $value);
         
+    }
+
+    private function userCreditHistory( $post_parent ): array
+    {
+        $current_year = date('Y');
+        $current_month = date('m');
+        //$current_month = "11";
+
+        $args = array(
+            'date_query' => array(
+                array(
+                    'year'  => $current_year,
+                    'month' => $current_month,
+                ),
+            ),
+            'post_type'      => 'wc_cs_credits_txn',
+            'post_status'    => 'any',
+            'posts_per_page' => -1,
+            'post_parent' => $post_parent,
+        );
+
+        
+        $arrPosts = get_posts( $args );
+
+        $history = [];
+        if (count($arrPosts))
+        {
+            foreach ($arrPosts as $objPost)
+            {
+                $history[] = [
+                    'title' => $objPost->post_title,
+                    'description' => $objPost->post_content,
+                    'date' => date( "M d, Y h:i a", get_post_meta($objPost->ID, "_date_created", true) ),
+                    'credited' => get_post_meta($objPost->ID, "_credited", true),
+                    'debited' => get_post_meta($objPost->ID, "_debited", true),
+                    'balance' => get_post_meta($objPost->ID, "_balance", true),
+                ];
+            }
+        }
+
+        return $history;
+    }
+
+    private function sendCreditHistoryEmail($recipient, $name, $history, $credit_id, $user_id)
+    {
+        error_log('sib: sending credit history email to ' . $recipient);
+        $post_meta = get_post_meta($credit_id);
+        
+        $user_billing_detail = $this->get_user_billing_details( $user_id );
+        
+        $email_class = WC()->mailer()->emails['WC_MonthlyCreditEmail'];
+        $custom_data = [
+            'history' => $history,
+            'blogname' => get_bloginfo( 'name' ),
+            'user_nicename' => $name,
+            'user_email' => $recipient,
+            'user_billing_detail' => $user_billing_detail,
+            'meta' => [
+                '_total_outstanding_amount' => $post_meta['_total_outstanding_amount'][0],
+                '_due_day' => $post_meta['_due_day'][0],
+                '_available_credits' => $post_meta['_available_credits'][0]
+            ]
+        ];
+
+        $email_class->trigger( $recipient, $custom_data );
+        //$email_class->trigger( "mohsibtain@gmail.com", $custom_data );
     }
 
     private function addUserCredits( $user_id, $credits )
@@ -177,7 +260,7 @@ class clsWpUser
         $email_class->trigger( $recipient, $custom_data );
     }
 
-    private function isAdded($email)
+    function isAdded($email)
     {
         $args = array(
             'post_type'  => 'wc_cs_credits',
@@ -217,8 +300,33 @@ class clsWpUser
     {
         return strpos($string, 'wcwp_') === 0;
     }
+
+    private function get_user_billing_details($user_id) {
+        // Check if the user exists
+        if (!get_user_by('id', $user_id)) {
+            return 'User not found.';
+        }
+    
+        // WooCommerce user meta keys for billing details
+        $billing_details = [
+            'billing_first_name' => get_user_meta($user_id, 'billing_first_name', true),
+            'billing_last_name'  => get_user_meta($user_id, 'billing_last_name', true),
+            'billing_company'    => get_user_meta($user_id, 'billing_company', true),
+            'billing_address_1'  => get_user_meta($user_id, 'billing_address_1', true),
+            'billing_address_2'  => get_user_meta($user_id, 'billing_address_2', true),
+            'billing_city'       => get_user_meta($user_id, 'billing_city', true),
+            'billing_postcode'   => get_user_meta($user_id, 'billing_postcode', true),
+            'billing_country'    => get_user_meta($user_id, 'billing_country', true),
+            'billing_state'      => get_user_meta($user_id, 'billing_state', true),
+            'billing_phone'      => get_user_meta($user_id, 'billing_phone', true),
+            'billing_email'      => get_user_meta($user_id, 'billing_email', true),
+        ];
+    
+        return $billing_details;
+    }
 }
 
-new clsWpUser();
+global $clsWpUser;
+$clsWpUser = new clsWpUser();
 
 if (!function_exists('p_r')) { function p_r($s) { echo "<pre>"; print_r($s); echo "</pre>"; } }
