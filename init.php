@@ -13,6 +13,8 @@ Author URI: https://github.com/msibtain
 //define( 'ES_WP_USER_BASENAME', plugin_basename( ES_WP_USER_FILE ) );
 //define( 'ES_WP_USER_BASENAME_DIR', trailingslashit( dirname( ES_WP_USER_BASENAME ) ) );
 
+require_once __DIR__ . '/dompdf/vendor/autoload.php';
+
 require_once __DIR__ . '/clsWpUser.php';
 require_once __DIR__ . '/clsWcExtend.php';
 require_once __DIR__ . '/clsCron.php';

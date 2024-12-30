@@ -58,20 +58,186 @@ class clsWpUser
 
             if ( $post_parent = $this->isAdded( $user->user_email ) )
             {
-                $history = $this->userCreditHistory( $post_parent );
+                $last_30_days_amount    = $this->last30DaysAmount( $post_parent ); 
+                $last_31_60_days_amount = $this->last31To60DaysAmount( $post_parent );
+                $last_61_90_days_amount = $this->last61To90DaysAmount( $post_parent );
+                $last_over_90_days_amount = $this->lastOver90DaysAmount( $post_parent );
+                $history                = $this->userCreditHistory( $post_parent );
                 
                 $temp[] = [
                     'email' => $user->user_email,
                     'history' => $history
                 ];
-                $this->sendCreditHistoryEmail($user->user_email, $user->user_nicename, $history, $post_parent, $user_id);
-            }
+                $this->sendCreditHistoryEmail(
+                    $user->user_email, 
+                    $user->user_nicename, 
+                    $history, 
+                    $post_parent, 
+                    $user_id,
+                    $last_30_days_amount,
+                    $last_31_60_days_amount,
+                    $last_61_90_days_amount,
+                    $last_over_90_days_amount
+                );
+            } 
             
         }
 
         $value = isset($_POST['send_invoice_to_mail']) ? 1 : 0;
         update_user_meta($user_id, 'send_invoice_to_mail', $value);
         
+    }
+
+    private function last30DaysAmount( $post_parent )
+    {
+        $date_30_days_ago = date('Y-m-d', strtotime('-30 days'));
+
+        $args = [
+            'post_type'      => 'wc_cs_credits_txn',
+            'post_parent' => $post_parent,
+            'posts_per_page' => -1, 
+            'post_status'    => 'any',
+            'date_query'     => [
+                [
+                    'after'     => $date_30_days_ago,
+                    'inclusive' => true,
+                ],
+            ],
+        ];
+
+        $arrPosts = get_posts( $args );
+
+        $credit = $debit = 0;
+        $difference = 0;
+        if (count($arrPosts))
+        {
+            foreach ($arrPosts as $objPost)
+            {
+                // get_post_meta($objPost->ID, "_balance", true)
+                $credit += get_post_meta($objPost->ID, "_credited", true);
+                $debit += get_post_meta($objPost->ID, "_debited", true);
+            }
+
+            $difference = $credit - $debit;
+        }
+
+        return $difference;
+
+    }
+
+    private function last31To60DaysAmount( $post_parent )
+    {
+        $date_31_days_ago = date('Y-m-d', strtotime('-31 days'));
+        $date_60_days_ago = date('Y-m-d', strtotime('-60 days'));
+
+        $args = [
+            'post_type'      => 'wc_cs_credits_txn',
+            'post_parent'    => $post_parent,
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'date_query'     => [
+                [
+                    'after'     => $date_60_days_ago,
+                    'before'    => $date_31_days_ago,
+                    'inclusive' => true,
+                ],
+            ],
+        ];
+
+        $arrPosts = get_posts( $args );
+
+        $credit = $debit = 0;
+        $difference = 0;
+        if (count($arrPosts))
+        {
+            foreach ($arrPosts as $objPost)
+            {
+                // get_post_meta($objPost->ID, "_balance", true)
+                $credit += get_post_meta($objPost->ID, "_credited", true);
+                $debit += get_post_meta($objPost->ID, "_debited", true);
+            }
+
+            $difference = $credit - $debit;
+        }
+
+        return $difference;
+
+    }
+
+    private function last61To90DaysAmount( $post_parent )
+    {
+        $date_61_days_ago = date('Y-m-d', strtotime('-61 days'));
+        $date_90_days_ago = date('Y-m-d', strtotime('-90 days'));
+
+        $args = [
+            'post_type'      => 'wc_cs_credits_txn',
+            'post_parent'    => $post_parent,
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'date_query'     => [
+                [
+                    'after'     => $date_90_days_ago,
+                    'before'    => $date_61_days_ago,
+                    'inclusive' => true,
+                ],
+            ],
+        ];
+
+        $arrPosts = get_posts( $args );
+
+        $credit = $debit = 0;
+        $difference = 0;
+        if (count($arrPosts))
+        {
+            foreach ($arrPosts as $objPost)
+            {
+                // get_post_meta($objPost->ID, "_balance", true)
+                $credit += get_post_meta($objPost->ID, "_credited", true);
+                $debit += get_post_meta($objPost->ID, "_debited", true);
+            }
+
+            $difference = $credit - $debit;
+        }
+
+        return $difference;
+
+    }
+
+    private function lastOver90DaysAmount( $post_parent )
+    {
+        $date_90_days_ago = date('Y-m-d', strtotime('-90 days'));
+
+        $args = [
+            'post_type'      => 'wc_cs_credits_txn',
+            'post_parent'    => $post_parent,
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'date_query'     => [
+                [
+                    'before'     => $date_90_days_ago,
+                    'inclusive' => true,
+                ],
+            ],
+        ];
+
+        $arrPosts = get_posts( $args );
+
+        $credit = $debit = 0;
+        $difference = 0;
+        if (count($arrPosts))
+        {
+            foreach ($arrPosts as $objPost)
+            {
+                // get_post_meta($objPost->ID, "_balance", true)
+                $credit += get_post_meta($objPost->ID, "_credited", true);
+                $debit += get_post_meta($objPost->ID, "_debited", true);
+            }
+
+            $difference = $credit - $debit;
+        }
+
+        return $difference;
+
     }
 
     private function userCreditHistory( $post_parent ): array
@@ -105,6 +271,7 @@ class clsWpUser
                     'title' => $objPost->post_title,
                     'description' => $objPost->post_content,
                     'date' => date( "M d, Y h:i a", get_post_meta($objPost->ID, "_date_created", true) ),
+                    'raw_date' => get_post_meta($objPost->ID, "_date_created", true),
                     'credited' => get_post_meta($objPost->ID, "_credited", true),
                     'debited' => get_post_meta($objPost->ID, "_debited", true),
                     'balance' => get_post_meta($objPost->ID, "_balance", true),
@@ -115,7 +282,17 @@ class clsWpUser
         return $history;
     }
 
-    private function sendCreditHistoryEmail($recipient, $name, $history, $credit_id, $user_id)
+    private function sendCreditHistoryEmail(
+        $recipient, 
+        $name, 
+        $history, 
+        $credit_id, 
+        $user_id, 
+        $last_30_days_amount = 0,
+        $last_31_60_days_amount = 0,
+        $last_61_90_days_amount = 0,
+        $last_over_90_days_amount = 0
+    )
     {
         error_log('sib: sending credit history email to ' . $recipient);
         $post_meta = get_post_meta($credit_id);
@@ -125,6 +302,10 @@ class clsWpUser
         $email_class = WC()->mailer()->emails['WC_MonthlyCreditEmail'];
         $custom_data = [
             'history' => $history,
+            'last_30_days_amount' => $last_30_days_amount,
+            'last_31_60_days_amount' => $last_31_60_days_amount,
+            'last_61_90_days_amount' => $last_61_90_days_amount,
+            'last_over_90_days_amount' => $last_over_90_days_amount,
             'blogname' => get_bloginfo( 'name' ),
             'user_nicename' => $name,
             'user_email' => $recipient,

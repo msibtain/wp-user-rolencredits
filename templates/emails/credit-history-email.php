@@ -26,20 +26,41 @@ $current_month = date('m');
 
 		<table border="0" width=100%"">
 			<tr>
-				<td align="left">
-					<img src="https://caliskan.com.au/wp-content/uploads/2022/07/footer-tempelate-2-e1684209346276.png" width="240">
+				<td align="left" valign="top">
+					<img src="https://caliskan.com.au/wp-content/uploads/2024/12/caliskan_logo_bnw.jpeg" width="250">
+					<br><br>
+					<b>Caliskan Holding Pty Ltd</b><br>
+					Unit 1 103-107 Batt Street,<br>
+					Jamisontown NSW 2750
+					<br><br>
+					<b>ABN:</b> 40 624 910 032<br>
+					<b>Tel:</b> 1300 388 111<br>
+					<b>Email:</b> sales@caliskan.com.au<br>
+					<b>Website:</b> www.caliskan.com.au
 				</td>
-				<td align="right">
-					<b>Bill Statement</b>
+				<td align="right" valign="top">
+					<h4 style="padding-top: 0; margin-top: 0;">Statement</h4>
+					<?php echo date("d/m/Y"); ?>
+					<br><br>
+					<b>
+					<?php echo $custom_data['user_nicename']; ?><br>
+					<?php echo $custom_data['user_email'] ?><br>
+					<?php echo $custom_data['user_billing_detail']['billing_address_1'] ?> 
+					<?php echo $custom_data['user_billing_detail']['billing_address_2'] ?> 
+					<?php echo $custom_data['user_billing_detail']['billing_city'] ?> 
+					<?php echo $custom_data['user_billing_detail']['billing_state'] ?> <br>
+					<?php echo $custom_data['user_billing_detail']['billing_postcode'] ?> 
+					</b>
 				</td>
 			</tr>
 		</table>
 
-		<hr>
+		<?php /* ?>
 
-		<table border="1" cellpadding="10" cellspacing="0" width="100%">
+		<table border="0" cellpadding="10" cellspacing="0" width="100%">
 		<tr>
-			<td width="50%" align="left">
+			<td width="10%"></td>
+			<td width="90%" align="left">
 				<b>
 					<?php echo $custom_data['user_nicename']; ?><br>
 					<?php echo $custom_data['user_email'] ?><br>
@@ -88,10 +109,44 @@ $current_month = date('m');
 			</td>
 		</tr>
 		</table>
-
+		<?php */ ?>
 		<br>
 
-		<h3>My Summary</h3>
+		<table border="1" cellpadding="10" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th width="7%">Date</th>
+					<th>Description</th>
+					<th width="15%">Amount</th>
+					<th width="15%">Balance</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($custom_data['history'] as $history) {  ?>
+					<tr>
+						<td><?php echo date("d/m/Y", $history['raw_date']) ?></td>
+						<td align="left"><?php echo $history['description'] ?></td>
+						<td>
+							$
+							<?php 
+							if ( !empty($history['credited']) )
+							{
+								echo number_format($history['credited'], 2);
+							}
+
+							if ( !empty($history['debited']) )
+							{
+								echo number_format($history['debited'], 2);
+							}
+							?>
+						</td>
+						<td>$<?php echo number_format($history['balance'], 2) ?></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+
+		<br>
 
 		<?php
 		$previousAmountDue = $allDebits = $allCredits = 0;
@@ -100,92 +155,95 @@ $current_month = date('m');
 			$allDebits += $history['debited'];
 			$allCredits += $history['credited'];
 		}
+		$previousAmountDue = $allCredits - $allDebits;
 		?>
 		<table border="0" width="100%">
 			<tr>
-				<td width="20%">
-					<table border="1" width="100%">
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								Previous Amount <br>Due
+								Current<br> &nbsp;
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								$<?php echo number_format($previousAmountDue, 2) ?>
+								0.00
 							</td>
 						</tr>
 					</table>
 				</td>
-				<td valign="bottom" width="5%">+</td>
-				<td width="20%">
-					<table border="1" width="100%">
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								Purchases & Other <br>Charges
+								1-30 Days Past<br>Invoice date
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								$<?php echo number_format($allDebits, 2) ?>
+								$<?php echo number_format($custom_data['last_30_days_amount'], 2); ?>
 							</td>
 						</tr>
 					</table>
 				</td>
-				<td valign="bottom" width="5%">-</td>
-				<td width="20%">
-					<table border="1" width="100%">
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								Payments and <br>Credits
+								31-60 Days Past<br>Invoice date
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								$<?php echo number_format($allCredits, 2) ?>
+								$<?php echo number_format($custom_data['last_31_60_days_amount'], 2); ?>
 							</td>
 						</tr>
 					</table>
 				</td>
-				<td valign="bottom" width="5%">=</td>
-				<td width="20%">
-					<table border="1" width="100%">
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								Total Amount <br>Due
+								61-90 Days Past<br>Invoice date
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								$<?php echo number_format( ($previousAmountDue + $allDebits - $allCredits), 2 ) ?>
+								$<?php echo number_format($custom_data['last_61_90_days_amount'], 2); ?>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
+						<tr>
+							<td>
+								Over 90 Days Past<br>Invoice date
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								$<?php echo number_format($custom_data['last_over_90_days_amount'], 2); ?>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="16%">
+					<table border="1" width="100%" cellspacing="0">
+						<tr>
+							<td>
+								Amount Due<br> &nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								$<?php echo number_format($previousAmountDue, 2); ?>
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
-		</table>
-
-		<br>
-
-		<table border="1" cellpadding="10" cellspacing="0" width="100%">
-			<thead>
-				<tr>
-					<th>Date</th>
-					<th>Activity</th>
-					<th>Credit</th>
-					<th>Debit</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($custom_data['history'] as $history) {  ?>
-					<tr>
-						<td><?php echo $history['date'] ?></td>
-						<td><?php echo $history['description'] ?></td>
-						<td>$<?php echo number_format($history['credited'], 2) ?></td>
-						<td>$<?php echo number_format($history['debited'], 2) ?></td>
-					</tr>
-				<?php } ?>
-			</tbody>
 		</table>
 
 		<br>
