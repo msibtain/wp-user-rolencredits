@@ -51,6 +51,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
             body {
                 font-family: Arial, sans-serif;
             }
+            .summaryBox {
+                font-size: 12px;
+                text-align: center;
+            }
         </style>
         </head>
         <body>
@@ -60,7 +64,7 @@ class WC_MonthlyCreditEmail extends WC_Email {
 
                     <table border="0" width=100%"">
                         <tr>
-                            <td align="left" valign="top" width="50%">
+                            <td align="left" valign="top" width="250">
                                 <img src="https://caliskan.com.au/wp-content/uploads/2024/12/caliskan_logo_bnw.jpeg" width="250">
                                 <br><br>
                                 <b>Caliskan Holding Pty Ltd</b><br>
@@ -72,8 +76,8 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <b>Email:</b> sales@caliskan.com.au<br>
                                 <b>Website:</b> www.caliskan.com.au
                             </td>
-                            <td align="right" valign="top" width="50%">
-                                <h4 style="padding-top: 0; margin-top: 0;">Statement</h4>
+                            <td align="right" valign="top" width="250">
+                                <h4 style="padding-top: 0; margin-top: 0;">Account Statement</h4>
                                 <?php echo date("d/m/Y"); ?>
                                 <br><br>
                                 <b>
@@ -138,10 +142,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                     ?>
                     <table border="0" width="100%">
                         <tr>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             Current<br> &nbsp;
                                         </td>
                                     </tr>
@@ -152,10 +156,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                     </tr>
                                 </table>
                             </td>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             1-30 Days Past<br>Invoice date
                                         </td>
                                     </tr>
@@ -166,10 +170,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                     </tr>
                                 </table>
                             </td>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             31-60 Days Past<br>Invoice date
                                         </td>
                                     </tr>
@@ -180,10 +184,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                     </tr>
                                 </table>
                             </td>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             61-90 Days Past<br>Invoice date
                                         </td>
                                     </tr>
@@ -194,10 +198,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                     </tr>
                                 </table>
                             </td>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             Over 90 Days Past<br>Invoice date
                                         </td>
                                     </tr>
@@ -208,10 +212,10 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                     </tr>
                                 </table>
                             </td>
-                            <td width="16%">
+                            <td width="16%" class="summaryBox">
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
-                                        <td>
+                                        <td align="center">
                                             Amount Due<br> &nbsp;
                                         </td>
                                     </tr>
@@ -227,6 +231,18 @@ class WC_MonthlyCreditEmail extends WC_Email {
 
                     <br>
                     <br>
+
+                    <hr>
+                    <br>
+
+                    <div align="center">
+                        <b>Payment Advice<br>
+                        Please pay to the following account.<br>
+                        Caliskan Holdings Pvt Ltd<br>
+                        B2B: 062107<br>
+                        Account No. 11200266
+                        </b>
+                    </div>
                 </td>
             </tr>
         </table>

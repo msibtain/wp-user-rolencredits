@@ -39,7 +39,7 @@ $current_month = date('m');
 					<b>Website:</b> www.caliskan.com.au
 				</td>
 				<td align="right" valign="top">
-					<h4 style="padding-top: 0; margin-top: 0;">Statement</h4>
+					<h4 style="padding-top: 0; margin-top: 0;">Account Statement</h4>
 					<?php echo date("d/m/Y"); ?>
 					<br><br>
 					<b>
@@ -248,6 +248,18 @@ $current_month = date('m');
 
 		<br>
 		<br>
+
+		<hr>
+		<br>
+
+		<div align="center">
+			<b>Payment Advice<br>
+			Please pay to the following account.<br>
+			Caliskan Holdings Pvt Ltd<br>
+			B2B: 062107<br>
+			Account No. 11200266
+			</b>
+		</div>
 	</td>
 </tr>
 </table>
