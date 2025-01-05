@@ -156,6 +156,7 @@ $current_month = date('m');
 			$allCredits += $history['credited'];
 		}
 		$previousAmountDue = $allCredits - $allDebits;
+		$toalAmountDue = 0;
 		?>
 		<table border="0" width="100%">
 			<tr>
@@ -168,7 +169,8 @@ $current_month = date('m');
 						</tr>
 						<tr>
 							<td align="center">
-								0.00
+								$<?php echo number_format($previousAmountDue, 2); ?>
+								<?php $toalAmountDue += $previousAmountDue; ?>
 							</td>
 						</tr>
 					</table>
@@ -183,6 +185,7 @@ $current_month = date('m');
 						<tr>
 							<td align="center">
 								$<?php echo number_format($custom_data['last_30_days_amount'], 2); ?>
+								<?php $toalAmountDue += $custom_data['last_30_days_amount']; ?>
 							</td>
 						</tr>
 					</table>
@@ -197,6 +200,7 @@ $current_month = date('m');
 						<tr>
 							<td align="center">
 								$<?php echo number_format($custom_data['last_31_60_days_amount'], 2); ?>
+								<?php $toalAmountDue += $custom_data['last_31_60_days_amount']; ?>
 							</td>
 						</tr>
 					</table>
@@ -211,6 +215,7 @@ $current_month = date('m');
 						<tr>
 							<td align="center">
 								$<?php echo number_format($custom_data['last_61_90_days_amount'], 2); ?>
+								<?php $toalAmountDue += $custom_data['last_61_90_days_amount']; ?>
 							</td>
 						</tr>
 					</table>
@@ -225,6 +230,7 @@ $current_month = date('m');
 						<tr>
 							<td align="center">
 								$<?php echo number_format($custom_data['last_over_90_days_amount'], 2); ?>
+								<?php $toalAmountDue += $custom_data['last_over_90_days_amount']; ?>
 							</td>
 						</tr>
 					</table>
@@ -238,7 +244,7 @@ $current_month = date('m');
 						</tr>
 						<tr>
 							<td align="center">
-								$<?php echo number_format($previousAmountDue, 2); ?>
+								$<?php echo number_format($toalAmountDue, 2); ?>
 							</td>
 						</tr>
 					</table>
@@ -249,17 +255,46 @@ $current_month = date('m');
 		<br>
 		<br>
 
+		<div align="left">
+			<b>Goods remain the property of Homemirus Pty Ltd until fully paid for.</b>
+		</div>
+
 		<hr>
 		<br>
 
-		<div align="center">
-			<b>Payment Advice<br>
-			Please pay to the following account.<br>
-			Caliskan Holdings Pvt Ltd<br>
-			B2B: 062107<br>
-			Account No. 11200266
-			</b>
-		</div>
+		<table border="0" width="100%">
+			<tr>
+				<td colspan="3" align="left">
+					<b>How to Pay</b>
+				</td>
+			</tr>
+			<tr>
+				<td width="33%" valign="top" align="left">
+					<b>Mail</b><br>
+					Please make cheques payable to:<br>
+					<b>Caliskan Holding Pty Ltd</b><br>
+					Unit 1 103-107 Batt Street,<br>
+					Jamisontown NSW 2750 <br>
+				</td>
+				<td width="33%" valign="top" align="left">
+					<b>Credit Card</b>
+					<br>
+					Credit card merchant fee applies: <br>
+					<b>Visa / MasterCard 1%</b>
+
+					<br><br><br>
+					<b>Amount Due: $<?php echo number_format($toalAmountDue, 2); ?></b>
+				</td>
+				<td width="33%" valign="top" align="left">
+					<b>Payment Advice<br>
+					Please pay to the following account.<br>
+					Caliskan Holdings Pvt Ltd<br>
+					B2B: 062107<br>
+					Account No. 11200266
+					</b>	
+				</td>
+			</tr>
+		</table>
 	</td>
 </tr>
 </table>
