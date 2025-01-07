@@ -179,7 +179,7 @@ $current_month = date('m');
 					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								1-30 Days Past<br>Invoice date
+								1-30 Days
 							</td>
 						</tr>
 						<tr>
@@ -194,7 +194,7 @@ $current_month = date('m');
 					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								31-60 Days Past<br>Invoice date
+								31-60 Days
 							</td>
 						</tr>
 						<tr>
@@ -209,7 +209,7 @@ $current_month = date('m');
 					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								61-90 Days Past<br>Invoice date
+								61-90 Days
 							</td>
 						</tr>
 						<tr>
@@ -224,7 +224,7 @@ $current_month = date('m');
 					<table border="1" width="100%" cellspacing="0">
 						<tr>
 							<td>
-								Over 90 Days Past<br>Invoice date
+								Over 90 Days
 							</td>
 						</tr>
 						<tr>
@@ -254,9 +254,9 @@ $current_month = date('m');
 
 		<br>
 		<br>
-
-		<div align="left">
-			<b>Goods remain the property of Homemirus Pty Ltd until fully paid for.</b>
+<div style="position:absolute; bottom:0">
+    <div align="left">
+			<b>Goods remain the property of Caliskan Holding PTY LTD until fully paid for.</b>
 		</div>
 
 		<hr>
@@ -288,13 +288,54 @@ $current_month = date('m');
 				<td width="33%" valign="top" align="left">
 					<b>Payment Advice<br>
 					Please pay to the following account.<br>
-					Caliskan Holdings Pvt Ltd<br>
+					Caliskan Holdings PTY LTD<br>
 					B2B: 062107<br>
 					Account No. 11200266
 					</b>	
 				</td>
 			</tr>
 		</table>
+</div>
+		<!--<div align="left">-->
+		<!--	<b>Goods remain the property of Caliskan Holding Pty Ltd until fully paid for.</b>-->
+		<!--</div>-->
+
+		<!--<hr>-->
+		<!--<br>-->
+
+		<!--<table border="0" width="100%">-->
+		<!--	<tr>-->
+		<!--		<td colspan="3" align="left">-->
+		<!--			<b>How to Pay</b>-->
+		<!--		</td>-->
+		<!--	</tr>-->
+		<!--	<tr>-->
+		<!--		<td width="33%" valign="top" align="left">-->
+		<!--			<b>Mail</b><br>-->
+		<!--			Please make cheques payable to:<br>-->
+		<!--			<b>Caliskan Holding Pty Ltd</b><br>-->
+		<!--			Unit 1 103-107 Batt Street,<br>-->
+		<!--			Jamisontown NSW 2750 <br>-->
+		<!--		</td>-->
+		<!--		<td width="33%" valign="top" align="left">-->
+		<!--			<b>Credit Card</b>-->
+		<!--			<br>-->
+		<!--			Credit card merchant fee applies: <br>-->
+		<!--			<b>Visa / MasterCard 1%</b>-->
+
+		<!--			<br><br><br>-->
+		<!--			<b>Amount Due: $<?php echo number_format($toalAmountDue, 2); ?></b>-->
+		<!--		</td>-->
+		<!--		<td width="33%" valign="top" align="left">-->
+		<!--			<b>Payment Advice<br>-->
+		<!--			Please pay to the following account.<br>-->
+		<!--			Caliskan Holdings Pvt Ltd<br>-->
+		<!--			B2B: 062107<br>-->
+		<!--			Account No. 11200266-->
+		<!--			</b>	-->
+		<!--		</td>-->
+		<!--	</tr>-->
+		<!--</table>-->
 	</td>
 </tr>
 </table>

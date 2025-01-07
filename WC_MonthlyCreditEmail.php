@@ -58,6 +58,9 @@ class WC_MonthlyCreditEmail extends WC_Email {
             .fs12 {
                 font-size: 12px;
             }
+            th{
+                border-bottom:1px solid black;
+            }
         </style>
         </head>
         <body>
@@ -92,6 +95,9 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <?php echo $this->custom_data['user_billing_detail']['billing_state'] ?> <br>
                                 <?php echo $this->custom_data['user_billing_detail']['billing_postcode'] ?> 
                                 </b>
+
+                                <br><br>
+                                <b>Invoice # <?php echo $this->custom_data['invoice_number']; ?></b>
                             </td>
                         </tr>
                     </table>
@@ -165,7 +171,7 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
                                         <td align="center">
-                                            1-30 Days Past<br>Invoice date
+                                            1-30 Days
                                         </td>
                                     </tr>
                                     <tr>
@@ -180,7 +186,7 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
                                         <td align="center">
-                                            31-60 Days Past<br>Invoice date
+                                            31-60 Days
                                         </td>
                                     </tr>
                                     <tr>
@@ -195,7 +201,7 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
                                         <td align="center">
-                                            61-90 Days Past<br>Invoice date
+                                            61-90 Days
                                         </td>
                                     </tr>
                                     <tr>
@@ -210,7 +216,7 @@ class WC_MonthlyCreditEmail extends WC_Email {
                                 <table border="1" width="100%" cellspacing="0">
                                     <tr>
                                         <td align="center">
-                                            Over 90 Days Past<br>Invoice date
+                                            Over 90 Days
                                         </td>
                                     </tr>
                                     <tr>
@@ -241,7 +247,8 @@ class WC_MonthlyCreditEmail extends WC_Email {
                     <br>
                     <br>
 
-                    <b>Goods remain the property of Homemirus Pty Ltd until fully paid for.</b>
+                   <div style="position: absolute; bottom: 0;">
+                        <b>Goods remain the property of Caliskan Holding PTY LTD until fully paid for.</b>
                     <hr>
                     <br>
 
@@ -271,13 +278,14 @@ class WC_MonthlyCreditEmail extends WC_Email {
                             <td width="165" valign="top" class="fs12">
                                 <b>Payment Advice<br>
                                 Please pay to the following account.<br>
-                                Caliskan Holdings Pvt Ltd<br>
+                                Caliskan Holdings PTY Ltd<br>
                                 B2B: 062107<br>
                                 Account No. 11200266
                                 </b>	
                             </td>
                         </tr>
                     </table>
+                   </div>
                 </td>
             </tr>
         </table>

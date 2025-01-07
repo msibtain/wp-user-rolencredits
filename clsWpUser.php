@@ -71,6 +71,7 @@ class clsWpUser
                 $this->sendCreditHistoryEmail(
                     $user->user_email, 
                     $user->user_nicename, 
+                    "INV-{$post_parent}-" . date("Ymd"),
                     $history, 
                     $post_parent, 
                     $user_id,
@@ -285,6 +286,7 @@ class clsWpUser
     private function sendCreditHistoryEmail(
         $recipient, 
         $name, 
+        $invoice_number,
         $history, 
         $credit_id, 
         $user_id, 
@@ -301,6 +303,7 @@ class clsWpUser
         
         $email_class = WC()->mailer()->emails['WC_MonthlyCreditEmail'];
         $custom_data = [
+            'invoice_number' => $invoice_number,
             'history' => $history,
             'last_30_days_amount' => $last_30_days_amount,
             'last_31_60_days_amount' => $last_31_60_days_amount,
